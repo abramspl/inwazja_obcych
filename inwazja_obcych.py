@@ -9,6 +9,7 @@ class InwazjaObcych:
 
     def __init__(self):
         """Inicjalizacja gry i utworzenie jej zasobow"""
+
         pygame.init()
         self.settings = Settings()
 
@@ -22,18 +23,25 @@ class InwazjaObcych:
 
     def run_game(self):
         """Rozpoczecie petli glownej gry"""
+
         while True:
-            # Oczekiwanie na nacisniecie klawisza lub przycisku myszy
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    sys.exit()
+            self._check_events()
+            self._update_screen()
 
-            # Odswiezenie ekranu w trakcie kazdej iteracji petli.
-            self.screen.fill(self.settings.bg_color)
-            self.ship.blitme()
+    def _check_events(self):
+        """Relacja na zdarzenia generowane przez klawiature i mysz."""
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
 
-            # Wyswietlenie ostatnio zmodyfikowanego ekranu.
-            pygame.display.flip()
+    def _update_screen(self):
+        """Uaktualnienie obrazow na ekranie i przejscie do nowego ekranu."""
+
+        self.screen.fill(self.settings.bg_color)
+        self.ship.blitme()
+
+        # Wyswietlenie ostatnio zmodyfikowanego ekranu.
+        pygame.display.flip()
 
 if __name__ == '__main__':
     # Utworzenie egzemplarza gry i jej uruchomienie.
