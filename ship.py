@@ -10,7 +10,7 @@ class Ship:
         self.screen_rect = ai_game.screen.get_rect()
 
         # Wczytanie obrazu statku kosmicznego i pobranie jego prostokata.
-        self.image = pygame.image.load('images/ship.png')
+        self.image = pygame.image.load('images/ship.bmp')
         self.rect = self.image.get_rect()
 
         # Kazdy nowy statek kosmiczny pojawiajacy sie na dole ekranu

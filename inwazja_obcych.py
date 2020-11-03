@@ -1,8 +1,8 @@
 import sys
-
 import pygame
 
 from settings import Settings
+from ship import Ship
 
 class InwazjaObcych:
     """Ogolna klasa przeznaczona do zarzadzania zasobami i sposobem dzialania gry"""
@@ -14,6 +14,8 @@ class InwazjaObcych:
 
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption('Inwazja obcych')
+
+        self.ship = Ship(self)
 
         # Zdefiniowanie koloru tla.
         self.bg_color = (230, 230, 230)
@@ -28,6 +30,7 @@ class InwazjaObcych:
 
             # Odswiezenie ekranu w trakcie kazdej iteracji petli.
             self.screen.fill(self.settings.bg_color)
+            self.ship.blitme()
 
             # Wyswietlenie ostatnio zmodyfikowanego ekranu.
             pygame.display.flip()
