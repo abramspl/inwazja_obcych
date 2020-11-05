@@ -11,3 +11,10 @@ class Settings:
 
         # Ustawienia dotyczace statku.
         self.ship_speed = 1.5
+
+        # Ustawienia dotyczace pocisku.
+        self.bullet_speed = 1.0
+        self.bullet_wight = 3
+        self.bullet_hight = 15
+        self.bullet_color = (60,60,60)
+        self.bullets_allowed = 3
