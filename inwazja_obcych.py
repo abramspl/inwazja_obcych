@@ -34,8 +34,24 @@ class InwazjaObcych:
     def _create_fleet(self):
         """Utworzenie pelnej floty obcych."""
 
-        # Utworzenie obcego.
+        # Utworzenie obcego i ustalenie liczby obcych, ktorzy zmieszcza sie w rzedzie.
+        # Odleglosc miedzy poszczegolnymi obcymi jest rowna szerokosci obcego.
         alien = Alien(self)
+        alien_width = alien.rect.width
+        iavailable_space_x = self.settings.screen_width - (2 * alien_width)
+        number_aliens_x = iavailable_space_x // (2 * alien_width)
+
+        # Utworzenie pierwszego rzedu obcych.
+        for alien_number in range(number_aliens_x):
+            self._create_alien(alien_number)
+
+    def _create_alien(self,alien_number):
+        """Utworzenie obcego i umieszczenie go w rzedzie."""
+
+        alien = Alien(self)
+        alien_width = alien.rect.width
+        alien.x = alien_width + 2 * alien_width * alien_number
+        alien.rect.x = alien.x
         self.aliens.add(alien)
 
     def run_game(self):
