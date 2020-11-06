@@ -4,6 +4,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
 
 class InwazjaObcych:
     """Ogolna klasa przeznaczona do zarzadzania zasobami i sposobem dzialania gry"""
@@ -26,6 +27,16 @@ class InwazjaObcych:
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+
+        self._create_fleet()
+
+    def _create_fleet(self):
+        """Utworzenie pelnej floty obcych."""
+
+        # Utworzenie obcego.
+        alien = Alien(self)
+        self.aliens.add(alien)
 
     def run_game(self):
         """Rozpoczecie petli glownej gry"""
@@ -93,6 +104,7 @@ class InwazjaObcych:
         self.ship.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+        self.aliens.draw(self.screen)
 
         # Wyswietlenie ostatnio zmodyfikowanego ekranu.
         pygame.display.flip()
