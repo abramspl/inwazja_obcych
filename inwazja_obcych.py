@@ -5,6 +5,7 @@ import pygame
 
 from settings import Settings
 from game_stats import GameStats
+from button import Button
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
@@ -36,6 +37,9 @@ class InwazjaObcych:
         self.aliens = pygame.sprite.Group()
 
         self._create_fleet()
+
+        # Utworzenie przycisku Gra.
+        self.play_button = Button(self, 'Gra')
 
     def _create_fleet(self):
         """Utworzenie pelnej floty obcych."""
@@ -90,6 +94,29 @@ class InwazjaObcych:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
+
+    def _check_play_button(self, mouse_pos):
+        """Rozpoczecie nowej gry po kliknieciu przycisku Gra przez uzytkownika."""
+
+        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+        if button_clicked and not self.stats.game_active:
+            # Wyzerowanie danych statycznych gry.
+            self.stats.reset_stats()
+            self.stats.game_active = True
+
+            # Usuniecie zawartosci list aliens i bullets.
+            self.aliens.empty()
+            self.bullets.empty()
+
+            # Utworzenie nowej floty i wysrodkowanie statku.
+            self._create_fleet()
+            self.ship.center_ship()
+
+            # Ukrycie kursora myszy.
+            pygame.mouse.set_visible(False)
 
     def _check_keydown_events(self,event):
         """Reakacja na nacisniecie klawisza."""
@@ -200,6 +227,7 @@ class InwazjaObcych:
 
         else:
             self.stats.game_active = False
+            pygame.mouse.set_visible(True)
 
     def _update_screen(self):
         """Uaktualnienie obrazow na ekranie i przejscie do nowego ekranu."""
@@ -209,6 +237,10 @@ class InwazjaObcych:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
+
+        # Wyswietlenie orzycisku tylko wtedy, gdy gra jest nieaktywna.
+        if not self.stats.game_active:
+            self.play_button.draw_button()
 
         # Wyswietlenie ostatnio zmodyfikowanego ekranu.
         pygame.display.flip()
