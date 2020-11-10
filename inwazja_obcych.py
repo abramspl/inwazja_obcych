@@ -5,6 +5,7 @@ import pygame
 
 from settings import Settings
 from game_stats import GameStats
+from scoreboard import Scoreboard
 from button import Button
 from ship import Ship
 from bullet import Bullet
@@ -29,8 +30,10 @@ class InwazjaObcych:
         # self.settings.screen_height = self.screen.get_rect().height
         # pygame.display.set_caption('Inwazja obcych')
 
-        # Utworzenie egzemplarza przechowujacego dane statystyczne dotyczace gry.
+        # Utworzenie egzemplarza przechowujacego dane statystyczne dotyczace gry
+        # oraz utworzenie egzemplarza klasy Scoreboard.
         self.stats = GameStats(self)
+        self.sb = Scoreboard(self)
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
@@ -110,6 +113,8 @@ class InwazjaObcych:
             # Wyzerowanie danych statycznych gry.
             self.stats.reset_stats()
             self.stats.game_active = True
+            self.sb.prep_score()
+            self.sb.prep_level()
 
             # Usuniecie zawartosci list aliens i bullets.
             self.aliens.empty()
@@ -181,11 +186,21 @@ class InwazjaObcych:
         # Usuniecie wszystkich pociskow i obcych, miedzy ktorymi doszlo do kolizji.
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
 
+        if collisions:
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
+            self.sb.prep_score()
+            self.sb.check_high_score()
+
         if not self.aliens:
             # Usuniecie istniejacych pociskow, przyspieszenie gry i utworzenie nowej floty.
             self.bullets.empty()
             self._create_fleet()
             self.settings.increase_speed()
+
+            # Ikrementacja numeru poziomu.
+            self.stats.level += 1
+            self.sb.prep_level()
 
     def _check_aliens_bottom(self):
         """Sprawdzanie, czy ktorykolwiek obcy dotarl do dolnej krawedzi ekranu."""
@@ -242,6 +257,9 @@ class InwazjaObcych:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
+
+        # Wyswietlenie informacji o punktacji.
+        self.sb.show_score()
 
         # Wyswietlenie orzycisku tylko wtedy, gdy gra jest nieaktywna.
         if not self.stats.game_active:
