@@ -103,6 +103,10 @@ class InwazjaObcych:
 
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.stats.game_active:
+
+            # Wyzerowanie ustawien dotyczacych gry.
+            self.settings.initialize_dynamic_settings()
+
             # Wyzerowanie danych statycznych gry.
             self.stats.reset_stats()
             self.stats.game_active = True
@@ -178,9 +182,10 @@ class InwazjaObcych:
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
 
         if not self.aliens:
-            # Pozbycie sie istniejacych pociskow i utworzenie nowej floty.
+            # Usuniecie istniejacych pociskow, przyspieszenie gry i utworzenie nowej floty.
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
 
     def _check_aliens_bottom(self):
         """Sprawdzanie, czy ktorykolwiek obcy dotarl do dolnej krawedzi ekranu."""
