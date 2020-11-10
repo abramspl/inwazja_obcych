@@ -8,6 +8,7 @@ class Alien(Sprite):
         """Inicjalizacja obcego i zdefiniowanie jego polozenia poczatkowego"""
 
         super().__init__()
+
         self.screen = ai_game.screen
         self.settings = ai_game.settings
 
